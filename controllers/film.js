@@ -63,10 +63,29 @@ module.exports = {
 
       return res.status(201).send(films);
     } catch (error) {
-      console.log(error);
       return res.status(400).send(error);
     }
   },
+
+  async findRecommendations(req, res) {
+    try {
+      const randomFilmIds = Array.from({ length: 5 }, () =>
+        Math.floor(Math.random() * 5)
+      );
+      const films = await Film.findAll({
+        where: {
+          id: {
+            [Sequelize.Op.in]: randomFilmIds
+          }
+        }
+      });
+
+      return res.status(201).send(films);
+    } catch (error) {
+      return res.status(400).send(error);
+    }
+  },
+
   async get(req, res) {
     const { id } = req.params;
 
@@ -94,7 +113,6 @@ module.exports = {
 
       return res.status(201).send(films);
     } catch (error) {
-      console.log(error);
       return res.status(400).send(error);
     }
   },
@@ -136,7 +154,6 @@ module.exports = {
         user
       });
     } catch (error) {
-      console.log(error);
       return error;
     }
   }
